@@ -21,3 +21,4 @@ Pour supprimer un utilisateur, le frontend envoi une requête POST dont le corp 
     'id':'1'
 }
 
+
