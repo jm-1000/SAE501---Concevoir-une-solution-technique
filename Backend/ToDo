@@ -1,0 +1,23 @@
+Le frontend envoi d'abord une requête GET et attend des données (tous les utilisateurs dans la base de données) sur le format JSON, exemple :
+{
+    "utilisateurs": [
+        {"id": "1", "nom": "John Doe", "mail": "johndoe@example.com", "passwd": "zdqe3zSZ3Z", "status": "active"}, 
+        {"id": "2", "nom": "Dian Sue", "mail": "diansue@example.com", "passwd": "ADEaezadeZ3Z", "status": "active"},
+        ...
+    ]
+} 
+
+
+Pour créer un utilisateur, le frontend envoi une requête POST dont le corp (body) est en JSON : 
+{
+    'nom': 'john', 
+    'mail': 'mymail@mail.com'
+}
+Le mot de passe doive être créé automatiquement par le backend.
+
+
+Pour supprimer un utilisateur, le frontend envoi une requête POST dont le corp est en JSON : 
+{
+    'id':'1'
+}
+
