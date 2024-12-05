@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAE501 - Administration web : utilisateurs sans fil</title>
+    <style>
+        :root{
+            --shadow: 0px 2px 5px;
+            --theme-color: lightblue;
+            --theme-bg-color: rgba(255, 255, 255, 0.688);
+        }
+
+        body {
+            display: flex;
+            background-color:rgb(220, 220, 220);
+        }
+
+        aside {
+            width: 30%;
+            height: 65%;
+            background-color: var(--theme-bg-color);
+            padding: 2% 0 2% 2%;
+            box-shadow: var(--shadow);
+        }
+
+        aside form * {
+            display: block;
+            margin-left: 6%;
+        }
+
+        aside form label + input {
+            margin-top: 1%;
+            margin-bottom: 5%;
+            width: 80%;
+            padding: 1% 1%;
+            border-radius: 5px;
+            border: 2px solid lightgray;
+        }
+
+        aside form label + input:focus {
+            background-color: var(--theme-color);
+        }
+
+        aside form #btn {
+            /* width: 18%; */
+            padding: 1% 5%;
+        }
+
+        #btn {
+            font-size: x-small;
+            font-weight: bold;
+            padding: 0.5% 2%;
+            height: 10%;
+            border-radius: 7px;
+            border-color: lightgray;
+        }
+
+        #btn:hover {
+            background-color: var(--theme-color);
+            cursor: pointer;
+        }
+
+        section {
+            width: 70%;
+            background-color: var(--theme-bg-color);
+            margin-right: 1%;
+            padding: 2% 0 0 2%;
+            box-shadow: var(--shadow);
+            
+        }
+
+        section ul {
+            padding-left: 0%;
+            height: fit-content;
+            max-height: 87.5vh;
+            overflow-x: auto;
+        }
+
+        section li {
+            list-style: none;
+            border: 1px solid lightgrey;
+            margin: 0 1% 1.5% 0;
+            border-radius: 8px;
+        }
+
+        section li div:first-child  {
+            text-align: right;
+            display: flex;
+        }
+
+        section li div:first-child input {
+            margin: 0.5%;
+        }
+
+        section li div:first-child label {
+            flex: 1;
+            text-align: left;
+            padding: 1% 2%;
+        }
+
+        section li div:first-child:hover {
+            background-color: var(--theme-color);
+        }
+
+        section li div:first-child:hover label{
+            cursor: pointer;
+        }
+
+        section li div:last-child {
+            display: none;
+        }
+
+        section li div:last-child label {
+            display: block;
+            margin: 1% 0 1% 8%;
+        }
+
+    </style>
+</head>
+<body>
+    <section>
+        <h2>Utilisateurs sans fil</h2>
+        <p>Aucun utilisateur enregistré.</p>
+        <ul>
+        </ul>
+    </section>
+    <aside>
+        <h2>Nouveau utilisateur</h2>
+        <form method="post">
+            <label for="name">Nom</label>
+            <input type="text" name="name" id="name" required>
+            <label for="mail">Mail</label>
+            <input type="email" name="mail" id="mail">
+            <input id="btn" type="submit" value="Créer">
+        </form>
+    </aside> 
+
+    <script>
+
+        liElem = function(util) {
+            return `
+                <li>
+                    <div>
+                        <label id=${util['id']}> ${util['name']} </label> 
+                        <input id="btn" type="button" value="Suprimer">
+                        <input id="btn" type="button" value="Imprimer">
+                    </div>
+                    <div>
+                        <label>Mot de passe : ${util['passwd']}</label>
+                        <label>Mail : ${util['mail']}</label>
+                        <label>Dernière connexion : ${util['login']}</label>
+                    </div>
+                </li> 
+            `
+        }
+
+        fetch("/users")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json()
+            })
+            .then(data => {
+                ulElem = document.querySelector('ul')
+                if (data['users']) {
+                    data['users'].forEach(util => {
+                        
+                            ulElem.innerHTML += liElem(util)
+                    });
+                }
+                document.querySelector('section p').style.display = "none"
+
+                document.querySelectorAll('section div:first-child label').forEach(elem => {
+                    elem.addEventListener('click', (e) => {
+                        e.target.parentElement.nextElementSibling.style.display = 'block'
+                    })
+                })
+
+                document.querySelectorAll('section li').forEach(elem => {
+                    elem.addEventListener('mouseleave', (e) => {
+                        e.target.lastElementChild.style.display = 'none'
+                    })
+                })
+
+                document.querySelectorAll('section label + input').forEach(elem => {
+                    elem.addEventListener('click', (e) => {
+                        postRequest({
+                            id: e.target.parentElement.querySelector('label').id
+                        }) 
+                    })
+                })
+
+                document.querySelectorAll('section input + input').forEach(elem => {
+                    elem.addEventListener('click', (e) => {
+                    util = e.target.parentElement.parentElement.querySelectorAll('label:first-child')
+                    document.body.innerHTML = `
+                        <div style="display:block;">
+                            <p>Utilisateur : ${util[0].innerHTML}</p>
+                            <p>${util[1].innerHTML}</p>
+                        </div>  `
+                    window.print()    
+                    location.reload()
+                    })
+                })
+            })
+
+
+        function postRequest(data) {
+            fetch("/", {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 
+                    'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    location.reload()
+                })
+        }
+
+
+        document.querySelector('aside form').addEventListener('submit', (e) => {
+            e.preventDefault()
+            postRequest({
+                name: e.target[0].value,
+                mail: e.target[1].value
+            }) 
+        })
+    </script>
+</body>
+</html>
