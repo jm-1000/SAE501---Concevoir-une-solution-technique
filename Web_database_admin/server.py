@@ -10,8 +10,8 @@ import mysql.connector # sudo apt-get install python3-mysql.connector
 FRONTEND = "/Frontend/index.html"
 PORT = 8000
 DB_USERNAME = "adm-radius"
-DB_PASSWORD = "r2d???p2s"
-DB_HOST = "192.168.122.104"
+DB_PASSWORD = "r2d??sp2s"
+DB_HOST = "192.168.40.6"
 DB_NAME = "radius"
 
 class HttpHandler(http.server.SimpleHTTPRequestHandler):

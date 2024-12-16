@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAE501 - Administration web : utilisateurs sans fil</title>
+    <title>SAE501 - Equipe 6 : Admin-web-BD</title>
     <style>
         :root{
             --shadow: 0px 2px 5px;
-            --theme-color: lightblue;
+            --theme-color: darkslategrey;
             --theme-bg-color: rgba(255, 255, 255, 0.688);
         }
 
         body {
-            display: flex;
             background-color:rgb(220, 220, 220);
         }
 
@@ -40,10 +39,10 @@
 
         aside form label + input:focus {
             background-color: var(--theme-color);
+            color: white;
         }
 
         aside form #btn {
-            /* width: 18%; */
             padding: 1% 5%;
         }
 
@@ -59,12 +58,32 @@
         #btn:hover {
             background-color: var(--theme-color);
             cursor: pointer;
+            color: white;
+        }
+
+        div {
+            display: flex;
+        }
+
+        header {
+            background-color: var(--theme-color);
+            padding: 2% 0 0 2%;
+            box-shadow: gray var(--shadow);
+            color: white;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        header h3 {
+            padding-bottom: 2%;
+            margin: 1% 0 3px;
         }
 
         section {
             width: 70%;
             background-color: var(--theme-bg-color);
-            margin-right: 1%;
             padding: 2% 0 0 2%;
             box-shadow: var(--shadow);
             
@@ -101,10 +120,12 @@
 
         section li div:first-child:hover {
             background-color: var(--theme-color);
+            color: white;
         }
 
         section li div:first-child:hover label{
             cursor: pointer;
+            color: white;
         }
 
         section li div:last-child {
@@ -119,22 +140,28 @@
     </style>
 </head>
 <body>
-    <section>
-        <h2>Utilisateurs sans fil</h2>
-        <p>Aucun utilisateur enregistré.</p>
-        <ul>
-        </ul>
-    </section>
-    <aside>
-        <h2>Nouveau utilisateur</h2>
-        <form method="post">
-            <label for="name">Nom</label>
-            <input type="text" name="name" id="name" required>
-            <label for="mail">Mail</label>
-            <input type="email" name="mail" id="mail">
-            <input id="btn" type="submit" value="Créer">
-        </form>
-    </aside> 
+    <header>
+        <h2>SAE501 - Equipe 6</h2>
+        <h3>Administration web de la base des données</h3>
+    </header>
+    <div>
+        <section>
+            <h3>Utilisateurs sans fil</h3>
+            <p>Aucun utilisateur enregistré.</p>
+            <ul>
+            </ul>
+        </section>
+        <aside>
+            <h3>Ajouter</h3>
+            <form method="post">
+                <label for="name">Nom</label>
+                <input type="text" name="name" id="name" required>
+                <label for="mail">Mail</label>
+                <input type="email" name="mail" id="mail">
+                <input id="btn" type="submit" value="Créer">
+            </form>
+        </aside> 
+    </div>
 
     <script>
 
@@ -196,8 +223,13 @@
                     elem.addEventListener('click', (e) => {
                     util = e.target.parentElement.parentElement.querySelectorAll('label:first-child')
                     document.body.innerHTML = `
-                        <div style="display:block;">
-                            <p>Utilisateur : ${util[0].innerHTML}</p>
+                        <header>
+                            <h2>SAE501 - Equipe 6</h2>
+                            <h3>Administration web de la base des données</h3>
+                        </header>  
+                        <div style="display:block; padding: 2% 5%;">
+                            <p style="text-align:center;">Identifiant utilisateur Wifi</p>
+                            <p>Nom : ${util[0].innerHTML}</p>
                             <p>${util[1].innerHTML}</p>
                         </div>  `
                     window.print()    
